@@ -1,0 +1,77 @@
+Date : 2026-10-18 09:56:28
+Directory : /home/yuanjia/uCore-Tutorial-Code-2023S
+Total : 45 files,  -2629 codes, -418 comments, -360 blanks, all -3407 lines
+
+Languages
++----------+------------+------------+------------+------------+------------+
+| language | files      | code       | comment    | blank      | total      |
++----------+------------+------------+------------+------------+------------+
+| Python   |          4 |        117 |          0 |         22 |        139 |
+| Makefile |          2 |        -16 |         -1 |         -7 |        -24 |
+| Assembly |          2 |        -72 |         -9 |         -2 |        -83 |
+| C++      |         20 |       -416 |        -77 |        -93 |       -586 |
+| C        |         17 |     -2,242 |       -331 |       -280 |     -2,853 |
++----------+------------+------------+------------+------------+------------+
+
+Directories
++-------------------------------------------------------------+------------+------------+------------+------------+------------+
+| path                                                        | files      | code       | comment    | blank      | total      |
++-------------------------------------------------------------+------------+------------+------------+------------+------------+
+| .                                                           |         45 |     -2,629 |       -418 |       -360 |     -3,407 |
+| . (Files)                                                   |          1 |         -7 |         -1 |         -2 |        -10 |
+| nfs                                                         |          4 |       -286 |        -21 |        -61 |       -368 |
+| os                                                          |         37 |     -2,417 |       -396 |       -313 |     -3,126 |
+| scripts                                                     |          3 |         81 |          0 |         16 |         97 |
++-------------------------------------------------------------+------------+------------+------------+------------+------------+
+
+Files
++-------------------------------------------------------------+----------+------------+------------+------------+------------+
+| filename                                                    | language | code       | comment    | blank      | total      |
++-------------------------------------------------------------+----------+------------+------------+------------+------------+
+| /home/yuanjia/uCore-Tutorial-Code-2023S/Makefile            | Makefile |         -7 |         -1 |         -2 |        -10 |
+| /home/yuanjia/uCore-Tutorial-Code-2023S/nfs/Makefile        | Makefile |         -9 |          0 |         -5 |        -14 |
+| /home/yuanjia/uCore-Tutorial-Code-2023S/nfs/fs.c            | C        |       -224 |         -6 |        -38 |       -268 |
+| /home/yuanjia/uCore-Tutorial-Code-2023S/nfs/fs.h            | C++      |        -43 |        -15 |        -16 |        -74 |
+| /home/yuanjia/uCore-Tutorial-Code-2023S/nfs/types.h         | C++      |        -10 |          0 |         -2 |        -12 |
+| /home/yuanjia/uCore-Tutorial-Code-2023S/os/bio.c            | C        |        -79 |        -25 |        -11 |       -115 |
+| /home/yuanjia/uCore-Tutorial-Code-2023S/os/bio.h            | C++      |        -21 |          0 |         -5 |        -26 |
+| /home/yuanjia/uCore-Tutorial-Code-2023S/os/console.c        | C        |         -4 |          0 |         -1 |         -5 |
+| /home/yuanjia/uCore-Tutorial-Code-2023S/os/console.h        | C++      |         -1 |          0 |          0 |         -1 |
+| /home/yuanjia/uCore-Tutorial-Code-2023S/os/const.h          | C++      |         -5 |        -10 |         -4 |        -19 |
+| /home/yuanjia/uCore-Tutorial-Code-2023S/os/defs.h           | C++      |         -4 |          0 |         -1 |         -5 |
+| /home/yuanjia/uCore-Tutorial-Code-2023S/os/fcntl.h          | C++      |         -8 |          0 |         -2 |        -10 |
+| /home/yuanjia/uCore-Tutorial-Code-2023S/os/file.c           | C        |       -128 |        -18 |        -13 |       -159 |
+| /home/yuanjia/uCore-Tutorial-Code-2023S/os/file.h           | C++      |        -50 |         -6 |         -9 |        -65 |
+| /home/yuanjia/uCore-Tutorial-Code-2023S/os/fs.c             | C        |       -321 |        -82 |        -52 |       -455 |
+| /home/yuanjia/uCore-Tutorial-Code-2023S/os/fs.h             | C++      |        -61 |        -18 |        -17 |        -96 |
+| /home/yuanjia/uCore-Tutorial-Code-2023S/os/kalloc.c         | C        |        -42 |         -8 |         -7 |        -57 |
+| /home/yuanjia/uCore-Tutorial-Code-2023S/os/kalloc.h         | C++      |         -6 |          0 |         -2 |         -8 |
+| /home/yuanjia/uCore-Tutorial-Code-2023S/os/kernelvec.S      | Assembly |        -70 |        -12 |         -4 |        -86 |
+| /home/yuanjia/uCore-Tutorial-Code-2023S/os/loader.c         | C        |        -13 |          6 |          1 |         -6 |
+| /home/yuanjia/uCore-Tutorial-Code-2023S/os/loader.h         | C++      |         -1 |          0 |          0 |         -1 |
+| /home/yuanjia/uCore-Tutorial-Code-2023S/os/log.h            | C++      |         -2 |          0 |          0 |         -2 |
+| /home/yuanjia/uCore-Tutorial-Code-2023S/os/main.c           | C        |         -9 |          0 |          1 |         -8 |
+| /home/yuanjia/uCore-Tutorial-Code-2023S/os/pack.py          | Python   |         36 |          0 |          6 |         42 |
+| /home/yuanjia/uCore-Tutorial-Code-2023S/os/pipe.c           | C        |        -95 |          0 |         -5 |       -100 |
+| /home/yuanjia/uCore-Tutorial-Code-2023S/os/plic.c           | C        |        -23 |         -8 |         -5 |        -36 |
+| /home/yuanjia/uCore-Tutorial-Code-2023S/os/plic.h           | C++      |        -19 |         -3 |         -5 |        -27 |
+| /home/yuanjia/uCore-Tutorial-Code-2023S/os/proc.c           | C        |       -307 |        -26 |        -22 |       -355 |
+| /home/yuanjia/uCore-Tutorial-Code-2023S/os/proc.h           | C++      |        -38 |          1 |         -1 |        -38 |
+| /home/yuanjia/uCore-Tutorial-Code-2023S/os/queue.c          | C        |        -29 |          0 |         -5 |        -34 |
+| /home/yuanjia/uCore-Tutorial-Code-2023S/os/queue.h          | C++      |        -15 |         -2 |         -5 |        -22 |
+| /home/yuanjia/uCore-Tutorial-Code-2023S/os/riscv.h          | C++      |         -2 |          0 |          0 |         -2 |
+| /home/yuanjia/uCore-Tutorial-Code-2023S/os/sync.c           | C        |       -130 |        -11 |        -10 |       -151 |
+| /home/yuanjia/uCore-Tutorial-Code-2023S/os/sync.h           | C++      |        -30 |         -3 |         -6 |        -39 |
+| /home/yuanjia/uCore-Tutorial-Code-2023S/os/syscall.c        | C        |       -350 |        -12 |        -26 |       -388 |
+| /home/yuanjia/uCore-Tutorial-Code-2023S/os/syscall_ids.h    | C++      |        -13 |          3 |          0 |        -10 |
+| /home/yuanjia/uCore-Tutorial-Code-2023S/os/trampoline.S     | Assembly |         -2 |          3 |          2 |          3 |
+| /home/yuanjia/uCore-Tutorial-Code-2023S/os/trap.c           | C        |        -38 |         -4 |         -5 |        -47 |
+| /home/yuanjia/uCore-Tutorial-Code-2023S/os/virtio.h         | C++      |        -67 |        -24 |        -15 |       -106 |
+| /home/yuanjia/uCore-Tutorial-Code-2023S/os/virtio_disk.c    | C        |       -176 |        -73 |        -47 |       -296 |
+| /home/yuanjia/uCore-Tutorial-Code-2023S/os/vm.c             | C        |       -274 |        -64 |        -35 |       -373 |
+| /home/yuanjia/uCore-Tutorial-Code-2023S/os/vm.h             | C++      |        -20 |          0 |         -3 |        -23 |
+| /home/yuanjia/uCore-Tutorial-Code-2023S/scripts/initproc.py | Python   |        -13 |          0 |         -1 |        -14 |
+| /home/yuanjia/uCore-Tutorial-Code-2023S/scripts/kernelld.py | Python   |         59 |          0 |         11 |         70 |
+| /home/yuanjia/uCore-Tutorial-Code-2023S/scripts/pack.py     | Python   |         35 |          0 |          6 |         41 |
+| Total                                                       |          |     -2,629 |       -418 |       -360 |     -3,407 |
++-------------------------------------------------------------+----------+------------+------------+------------+------------+
