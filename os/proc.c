@@ -33,12 +33,12 @@ void proc_init(void)
 		p->ustack = (uint64)ustack[p - pool];
 		p->trapframe = (struct trapframe *)trapframe[p - pool];
 
-		p->TaskInfo->status = UnInit;
-		p->TaskInfo->time = 0;
+		p->TaskInfo.status = UnInit;
+		p->TaskInfo.time = 0;
 		p->start_time = 0;
 
 		for(int i=0; i<MAX_SYSCALL_NUM; i++){
-			p->TaskInfo->syscall_times[i] = 0;
+			p->TaskInfo.syscall_times[i] = 0;
 		}
 
 		/*
@@ -72,6 +72,12 @@ struct proc *allocproc(void)
 found:
 	p->pid = allocpid();
 	p->state = USED;
+
+	p->start_time=0;
+	memset(&p->TaskInfo, 0, sizeof(p->TaskInfo));
+	p->TaskInfo.status = UnInit;
+
+
 	memset(&p->context, 0, sizeof(p->context));
 	memset(p->trapframe, 0, PAGE_SIZE);
 	memset((void *)p->kstack, 0, PAGE_SIZE);
@@ -92,10 +98,10 @@ void scheduler(void)
 		for (p = pool; p < &pool[NPROC]; p++) {
 			if (p->state == RUNNABLE) {
 
-				p->TaskInfo->status = Running;
+				p->TaskInfo.status = Running;
 
 				if(p->start_time == 0){
-					p->start_time = get_cycle()/CPU_FREQ;
+					p->start_time = get_cycle();
 				}
 				/*
 				* LAB1: you may need to init proc start time here
@@ -127,7 +133,7 @@ void sched(void)
 void yield(void)
 {
 	current_proc->state = RUNNABLE;
-	current_proc->TaskInfo->status = Ready;
+	current_proc->TaskInfo.status = Ready;
 	sched();
 }
 
@@ -137,7 +143,7 @@ void exit(int code)
 	struct proc *p = curr_proc();
 	infof("proc %d exit with %d", p->pid, code);
 	p->state = UNUSED;
-	p->TaskInfo->status = Exited;
+	p->TaskInfo.status = Exited;
 	finished();
 	sched();
 }

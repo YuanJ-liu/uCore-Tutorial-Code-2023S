@@ -28,18 +28,6 @@ struct context {
 
 enum procstate { UNUSED, USED, SLEEPING, RUNNABLE, RUNNING, ZOMBIE };
 
-// Per-process state
-struct proc {
-	enum procstate state; // Process state
-	int pid; // Process ID
-	uint64 ustack; // Virtual address of user stack
-	uint64 kstack; // Virtual address of kernel stack
-	struct trapframe *trapframe; // data page for trampoline.S
-	struct context context; // swtch() here to run process
-
-	struct TaskInfo* TaskInfo;
-	uint64 start_time;
-};
 
 typedef enum {
     UnInit,
@@ -52,6 +40,19 @@ struct TaskInfo{
 	TaskStatus status;
 	unsigned int syscall_times[MAX_SYSCALL_NUM];
 	int time;
+};
+
+// Per-process state
+struct proc {
+	enum procstate state; // Process state
+	int pid; // Process ID
+	uint64 ustack; // Virtual address of user stack
+	uint64 kstack; // Virtual address of kernel stack
+	struct trapframe *trapframe; // data page for trampoline.S
+	struct context context; // swtch() here to run process
+
+	struct TaskInfo TaskInfo;
+	uint64 start_time;
 };
 
 /*

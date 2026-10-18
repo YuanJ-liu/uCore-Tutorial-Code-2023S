@@ -38,9 +38,11 @@ uint64 sys_gettimeofday(TimeVal *val, int _tz)
 
 uint sys_task_info(struct TaskInfo * TaskInfo)
 {
-	TaskInfo = curr_proc()->TaskInfo;
-	uint64 time_s = get_cycle()/CPU_FREQ-(curr_proc()->start_time);
-	TaskInfo->time = time_s * 1000;
+	struct proc* p = curr_proc();
+	uint64 elapsed = (get_cycle() - p->start_time) * 1000 / CPU_FREQ;;
+	p->TaskInfo.time = elapsed;
+
+	*TaskInfo = p->TaskInfo; 
 	return 0;
 }
 /*
@@ -58,8 +60,7 @@ void syscall()
 	tracef("syscall %d args = [%x, %x, %x, %x, %x, %x]", id, args[0],
 	       args[1], args[2], args[3], args[4], args[5]);
 
-	struct TaskInfo *TaskInfo = curr_proc()->TaskInfo;
-	TaskInfo->syscall_times[id]++;
+    curr_proc()->TaskInfo.syscall_times[id]++;
 	/*
 	* LAB1: you may need to update syscall counter for task info here
 	*/
