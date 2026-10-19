@@ -60,7 +60,9 @@ void syscall()
 	tracef("syscall %d args = [%x, %x, %x, %x, %x, %x]", id, args[0],
 	       args[1], args[2], args[3], args[4], args[5]);
 
-    curr_proc()->TaskInfo.syscall_times[id]++;
+	if(id >= 0 && id < MAX_SYSCALL_NUM ){
+		    curr_proc()->TaskInfo.syscall_times[id]++;
+	}
 	/*
 	* LAB1: you may need to update syscall counter for task info here
 	*/
