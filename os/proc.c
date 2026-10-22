@@ -3,6 +3,7 @@
 #include "loader.h"
 #include "trap.h"
 #include "vm.h"
+#include "timer.h"
 
 struct proc pool[NPROC];
 __attribute__((aligned(16))) char kstack[NPROC][PAGE_SIZE];
@@ -30,6 +31,15 @@ void proc_init(void)
 		p->state = UNUSED;
 		p->kstack = (uint64)kstack[p - pool];
 		p->trapframe = (struct trapframe *)trapframe[p - pool];
+
+		p->TaskInfo.status = UnInit;
+		p->TaskInfo.time = 0;
+		p->start_cycle = 0;
+
+		for(int i=0; i< MAX_SYSCALL_NUM; i++){
+			p->TaskInfo.syscall_times[i] = 0;
+		}
+
 		/*
 		* LAB1: you may need to initialize your new fields of proc here
 		*/
@@ -85,6 +95,9 @@ void scheduler(void)
 	for (;;) {
 		for (p = pool; p < &pool[NPROC]; p++) {
 			if (p->state == RUNNABLE) {
+
+				p->TaskInfo.status = Running;
+				if(p->start_cycle == 0) p->start_cycle = get_cycle();
 				/*
 				* LAB1: you may need to init proc start time here
 				*/
