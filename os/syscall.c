@@ -107,8 +107,10 @@ void syscall()
 	* LAB1: you may need to update syscall counter for task info here
 	*/
 
-	if(id > MAX_SYSCALL_NUM){
-		ret = -1;
+	if(id < 0 || id > MAX_SYSCALL_NUM){
+		trapframe->a0 = -1;
+		errorf("unknown syscall %d", id);
+		return;
 	}
 
 	curr_proc()->TaskInfo.syscall_times[id]++;
@@ -131,6 +133,7 @@ void syscall()
 		break;
 	case SYS_taskinfo:
 	    ret = sys_task_info(args[0]);
+		break;
 	/*
 	* LAB1: you may need to add SYS_taskinfo case here
 	*/
