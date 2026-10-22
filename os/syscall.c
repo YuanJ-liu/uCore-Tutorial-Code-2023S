@@ -92,18 +92,19 @@ uint64 sys_mmap(uint64 start, unsigned long long len, int port, int flag, int fd
 	uint64* pagetable = curr_proc()->pagetable;
 	uint64* pte;
 	uint64 pa;
-		for(; len > 0; len -= PGSIZE , start += PGSIZE){
-			if(pte = walk(pagetable, start, 1) == 0){
+	
+		for(; ; len -= PGSIZE , start += PGSIZE){
+			if(pte = walk(pagetable, start, 1) == 0){  // to do
 				return -1;
 			}
 			if(*pte & PTE_V){
 			    errorf("remap");
 			    return -1;
 			}
-			if(pa = (uint64)kalloc() == 0){
+			if((pa=(uint64)kalloc()) == 0){
 				return -1;
 			}
-			*pte = PA2PTE(pa)| PTE_U | port | PTE_V ;
+			*pte = PA2PTE(pa)| PTE_U | port | PTE_V ;  // to do
 		}
     }
 	else{
@@ -135,7 +136,7 @@ void syscall()
 	* LAB1: you may need to update syscall counter for task info here
 	*/
 
-	if(id < 0 || id > MAX_SYSCALL_NUM){
+	if(id < 0 || id >= MAX_SYSCALL_NUM){
 		trapframe->a0 = -1;
 		errorf("unknown syscall %d", id);
 		return;
