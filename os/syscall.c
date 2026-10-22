@@ -88,15 +88,11 @@ uint64 sys_mmap(uint64 start, unsigned long long len, int port, int flag, int fd
 	if(start % PGSIZE != 0){
 		return -1;
 	}
-
 	if(port & ~0x7 == 0 && port & 0x7 != 0){
-
 	uint64* pagetable = curr_proc()->pagetable;
 	uint64* pte;
 	uint64 pa;
-
 		for(; len > 0; len -= PGSIZE , start += PGSIZE){
-
 			if(pte = walk(pagetable, start, 1) == 0){
 				return -1;
 			}
@@ -107,16 +103,12 @@ uint64 sys_mmap(uint64 start, unsigned long long len, int port, int flag, int fd
 			if(pa = (uint64)kalloc() == 0){
 				return -1;
 			}
-
 			*pte = PA2PTE(pa)| PTE_U | port | PTE_V ;
 		}
     }
-
 	else{
-
 		return -1;
 	}
-
 	return 0;
 }
 
