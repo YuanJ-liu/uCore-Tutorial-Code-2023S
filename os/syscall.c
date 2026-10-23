@@ -94,7 +94,7 @@ uint64 sys_mmap(uint64 start, unsigned long long len, int port, int flag, int fd
 	if (len > (1ULL << 30)) {
     return -1;
     }
-	if((port & ~0x7) == 0 && (port & 0x7) == 0){
+	if((port & ~0x7) != 0 || (port & 0x7) == 0){
 	return -1;
 	}
 	uint64 end = start + len;     // len performes same as page_len logically here
@@ -103,15 +103,15 @@ uint64 sys_mmap(uint64 start, unsigned long long len, int port, int flag, int fd
 	}
 
 	uint64* pa;
-	int perm = (port << 1) || PTE_U;
+	int perm = (port << 1) | PTE_U;
 	uint64 page_len = PGROUNDUP(len);
 	pagetable_t pagetable = curr_proc()->pagetable;
 
 	for(uint64 a = start; page_len > 0; page_len -= PGSIZE, a += PGSIZE){
 		uint64* pte = walk(pagetable, a, 1);
-		if(pte == 0 || (*pte & PTE_V == 1)) return -1;
+		if(pte == 0 || ((*pte & PTE_V) != 0)) return -1;
 		if((pa = kalloc()) == 0) return -1;
-		*pte = PA2PTE(pa) | PTE_V;
+		*pte = PA2PTE(pa) | perm | PTE_V;
 	}
 
 	return 0;
