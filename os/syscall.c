@@ -112,6 +112,7 @@ uint64 sys_mmap(uint64 start, unsigned long long len, int port, int flag, int fd
 		if(pte == 0 || ((*pte & PTE_V) != 0)) return -1;
 		if((pa = kalloc()) == 0) return -1;
 		*pte = PA2PTE(pa) | perm | PTE_V;
+		memset(pa, 0, PGSIZE);
 	}
 
 	return 0;
