@@ -68,7 +68,8 @@ uint64 sys_sbrk(int n)
         return addr;	
 }
 
-uint64 sys_task_info(uint64 ti){
+uint64 sys_task_info(uint64 ti)
+{
 
 	struct proc* p = curr_proc();
 	uint64 elapsed = (get_cycle() - p->start_cycle) * 1000 / CPU_FREQ;
@@ -84,16 +85,21 @@ uint64 sys_task_info(uint64 ti){
 	return 0;
 }
 
-uint64 sys_mmap(uint64 start, unsigned long long len, int port, int flag, int fd){
+uint64 sys_mmap(uint64 start, unsigned long long len, int port, int flag, int fd)
+{
 	if(start % PGSIZE != 0){
 		return -1;
 	}
-	if(port & ~0x7 == 0 && port & 0x7 != 0){
+	if (len > (1ULL << 30)) {
+    return -1;
+    }
+
+	if((port & ~0x7) == 0 && (port & 0x7 != 0)){
 	uint64* pagetable = curr_proc()->pagetable;
 	uint64* pte;
 	uint64 pa;
-	
-		for(; ; len -= PGSIZE , start += PGSIZE){
+	uint64 page_len = PGROUNDUP(len);
+		for(; page_len > 0; page_len -= PGSIZE , start += PGSIZE){
 			if(pte = walk(pagetable, start, 1) == 0){  // to do
 				return -1;
 			}
@@ -104,12 +110,37 @@ uint64 sys_mmap(uint64 start, unsigned long long len, int port, int flag, int fd
 			if((pa=(uint64)kalloc()) == 0){
 				return -1;
 			}
+			port << 1;
 			*pte = PA2PTE(pa)| PTE_U | port | PTE_V ;  // to do
 		}
     }
 	else{
 		return -1;
 	}
+	return 0;
+}
+
+uint64 sys_munmap(uint64 start, unsigned long long len)
+{
+	if(start % PGSIZE != 0){
+		return -1;
+	}
+	if (len > (1ULL << 30)) {
+    return -1;
+    }
+	uint64 end = start + len;
+	if(end < start  || end > MAXVA){
+		return -1;
+	}
+
+	uint64 page_len = PGROUNDUP(len);
+	uint64 npages = page_len / PGSIZE;
+	for(; page_len > 0; len -= PGSIZE, start += PGSIZE){
+		if(walkaddr(curr_proc()->pagetable, start) == 0)
+			return -1;
+	}
+	uvunmap(curr_proc()->pagetable, start, npages, 1);
+
 	return 0;
 }
 
@@ -164,10 +195,10 @@ void syscall()
 	    ret = sys_task_info(args[0]);
 		break;
 	case SYS_munmap:
-                        // to do 
+        ret = sys_munmap(args[0], args[1]);
 	    break;
 	case SYS_mmap:
-                        // to do
+        ret = sys_mmap(args[0], args[1], (int)args[2], (int)args[3], (int)args[4]);
 	    break;
 	/*
 	* LAB1: you may need to add SYS_taskinfo case here
