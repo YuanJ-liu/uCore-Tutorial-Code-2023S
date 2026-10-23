@@ -87,36 +87,33 @@ uint64 sys_task_info(uint64 ti)
 
 uint64 sys_mmap(uint64 start, unsigned long long len, int port, int flag, int fd)
 {
+	if(len == 0) return 0;
 	if(start % PGSIZE != 0){
 		return -1;
 	}
 	if (len > (1ULL << 30)) {
     return -1;
     }
-
-	if((port & ~0x7) == 0 && (port & 0x7 != 0)){
-	uint64* pagetable = curr_proc()->pagetable;
-	uint64* pte;
-	uint64 pa;
-	uint64 page_len = PGROUNDUP(len);
-		for(; page_len > 0; page_len -= PGSIZE , start += PGSIZE){
-			if(pte = walk(pagetable, start, 1) == 0){  // to do
-				return -1;
-			}
-			if(*pte & PTE_V){
-			    errorf("remap");
-			    return -1;
-			}
-			if((pa=(uint64)kalloc()) == 0){
-				return -1;
-			}
-			port << 1;
-			*pte = PA2PTE(pa)| PTE_U | port | PTE_V ;  // to do
-		}
-    }
-	else{
+	if((port & ~0x7) == 0 && (port & 0x7) == 0){
+	return -1;
+	}
+	uint64 end = start + len;     // len performes same as page_len logically here
+	if(end < start || end > MAXVA){
 		return -1;
 	}
+
+	uint64* pa;
+	int perm = (port << 1) || PTE_U;
+	uint64 page_len = PGROUNDUP(len);
+	pagetable_t pagetable = curr_proc()->pagetable;
+
+	for(uint64 a = start; page_len > 0; page_len -= PGSIZE, a += PGSIZE){
+		uint64* pte = walk(pagetable, a, 1);
+		if(pte == 0 || (*pte & PTE_V == 1)) return -1;
+		if((pa = kalloc()) == 0) return -1;
+		*pte = PA2PTE(pa) | PTE_V;
+	}
+
 	return 0;
 }
 
@@ -135,11 +132,11 @@ uint64 sys_munmap(uint64 start, unsigned long long len)
 
 	uint64 page_len = PGROUNDUP(len);
 	uint64 npages = page_len / PGSIZE;
-	for(; page_len > 0; len -= PGSIZE, start += PGSIZE){
-		if(walkaddr(curr_proc()->pagetable, start) == 0)
+	for(uint64 a = start; page_len > 0; page_len -= PGSIZE, a += PGSIZE){
+		if(walkaddr(curr_proc()->pagetable, a) == 0)
 			return -1;
 	}
-	uvunmap(curr_proc()->pagetable, start, npages, 1);
+	uvmunmap(curr_proc()->pagetable, start, npages, 1);
 
 	return 0;
 }
