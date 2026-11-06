@@ -99,7 +99,7 @@ uint64 sys_spawn(uint64 va)
 
 	char name[200];
 	copyinstr(p->pagetable, name, va, 200);
-	int id = get_id_by_name(name);
+	uint64 id = get_id_by_name(name);
 	if(id < 0){
 		return -1;
 	}
@@ -110,12 +110,11 @@ uint64 sys_spawn(uint64 va)
 		panic("uvmcopy\n");
 	}
 	np -> parent = p;
-	loader(id, np);
+	loader((int)id, np);
 	np -> state = RUNNABLE;
 	add_task(np);
-	if(id)
 	
-	return -1;
+	return id;
 }
 
 uint64 sys_set_priority(long long prio){
