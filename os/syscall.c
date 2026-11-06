@@ -94,7 +94,27 @@ uint64 sys_wait(int pid, uint64 va)
 
 uint64 sys_spawn(uint64 va)
 {
-	// TODO: your job is to complete the sys call
+	struct proc *np;
+	struct proc *p = curr_proc();
+
+	char name[200];
+	copyinstr(p->pagetable, name, va, 200);
+	int id = get_id_by_name(name);
+	if(id < 0){
+		return -1;
+	}
+	debugf("sys_spawn %s\n", name);
+
+
+	if((np = allocproc()) == 0){
+		panic("uvmcopy\n");
+	}
+	np -> parent = p;
+	loader(id, np);
+	np -> state = RUNNABLE;
+	add_task(np);
+	if(id)
+	
 	return -1;
 }
 
