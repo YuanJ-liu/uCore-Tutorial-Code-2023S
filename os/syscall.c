@@ -98,8 +98,11 @@ uint64 sys_spawn(uint64 va)
 	struct proc *p = curr_proc();
 
 	char name[200];
-	copyinstr(p->pagetable, name, va, 200);
-	uint64 id = get_id_by_name(name);
+	int len = copyinstr(p->pagetable, name, va, 200);
+	if(len <0 || len >= sizeof(name)){
+		return -1;
+	}
+	int id = get_id_by_name(name);
 	if(id < 0){
 		return -1;
 	}
@@ -107,14 +110,14 @@ uint64 sys_spawn(uint64 va)
 
 
 	if((np = allocproc()) == 0){
-		panic("uvmcopy\n");
+		return -1;
 	}
 	np -> parent = p;
-	loader((int)id, np);
+	loader(id, np);
 	np -> state = RUNNABLE;
 	add_task(np);
 	
-	return id;
+	return np -> pid;
 }
 
 uint64 sys_set_priority(long long prio){
