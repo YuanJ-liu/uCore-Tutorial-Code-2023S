@@ -47,6 +47,8 @@ struct proc {
 	struct file *files[FD_BUFFER_SIZE];
 	uint64 program_brk;
 	uint64 heap_bottom;
+	uint64 priority;
+	uint64 stride;
 };
 
 int cpuid();

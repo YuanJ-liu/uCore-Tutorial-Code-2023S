@@ -35,4 +35,7 @@ enum {
 #define MAX_STR_LEN (200)
 #define IDLE_PID (0)
 
+#define MAX_PRIORITY (0x7FFFFFFFFFFFFFFFULL)
+#define BIG_STRIDE (65536)
+
 #endif // CONST_H

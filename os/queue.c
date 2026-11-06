@@ -14,7 +14,7 @@ void push_queue(struct queue *q, int value)
 	}
 	q->empty = 0;
 	q->data[q->tail] = value;
-	q->tail = (q->tail + 1) % NPROC;
+	q->tail = (q->tail + 1) % QUEUE_SIZE;
 }
 
 int pop_queue(struct queue *q)
@@ -22,7 +22,7 @@ int pop_queue(struct queue *q)
 	if (q->empty)
 		return -1;
 	int value = q->data[q->front];
-	q->front = (q->front + 1) % NPROC;
+	q->front = (q->front + 1) % QUEUE_SIZE;
 	if (q->front == q->tail)
 		q->empty = 1;
 	return value;

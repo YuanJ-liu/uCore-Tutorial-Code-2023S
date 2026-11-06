@@ -47,13 +47,32 @@ int allocpid()
 
 struct proc *fetch_task()
 {
-	int index = pop_queue(&task_queue);
+	if(task_queue.empty){
+		return 0;
+	}
+	
+	int index = task_queue.front;
+	int i = index;
+	do{
+		if(pool[task_queue.data[i]].stride < pool[task_queue.data[index]].stride)
+		{
+			index = i;
+		}
+		i = (i+1) % QUEUE_SIZE;
+	}
+	while(i != task_queue.tail);
+	
+	int proc_index = task_queue.data[index];
+
+	task_queue.data[index] = task_queue.data[task_queue.front];
+	pop_queue(&task_queue);
+
 	if (index < 0) {
 		debugf("No task to fetch\n");
 		return NULL;
 	}
-	debugf("fetch task %d(pid=%d) to task queue\n", index, pool[index].pid);
-	return pool + index;
+	debugf("fetch task %d(pid=%d) to task queue\n", proc_index, pool[proc_index].pid);
+	return pool + proc_index;
 }
 
 void add_task(struct proc *p)
@@ -86,6 +105,8 @@ found:
 	p->pagetable = uvmcreate((uint64)p->trapframe);
 	p->program_brk = 0;
         p->heap_bottom = 0;
+	p->priority = 16;
+	p->stride = 0;
 	memset(&p->context, 0, sizeof(p->context));
 	memset((void *)p->kstack, 0, KSTACK_SIZE);
 	memset((void *)p->trapframe, 0, TRAP_PAGE_SIZE);
@@ -123,6 +144,11 @@ void scheduler()
 		tracef("swtich to proc %d", p - pool);
 		p->state = RUNNING;
 		current_proc = p;
+        uint64 pass = BIG_STRIDE / p->priority;
+        if (pass == 0) {
+            pass = 1;
+        }
+        p->stride += pass;
 		swtch(&idle.context, &p->context);
 	}
 }

@@ -120,9 +120,12 @@ uint64 sys_spawn(uint64 va)
 	return np -> pid;
 }
 
-uint64 sys_set_priority(long long prio){
-    // TODO: your job is to complete the sys call
-    return -1;
+uint64 sys_set_priority(uint64 prio){
+	if(prio < 2 || prio > MAX_PRIORITY){
+		return -1;
+	}
+    curr_proc()->priority = prio;
+	return prio;
 }
 
 
@@ -205,7 +208,8 @@ extern char trap_page[];
 void syscall()
 {
 	struct trapframe *trapframe = curr_proc()->trapframe;
-	int id = trapframe->a7, ret;
+	int id = trapframe->a7;
+	uint64 ret;
 	uint64 args[6] = { trapframe->a0, trapframe->a1, trapframe->a2,
 			   trapframe->a3, trapframe->a4, trapframe->a5 };
 	tracef("syscall %d args = [%x, %x, %x, %x, %x, %x]", id, args[0],
@@ -252,6 +256,9 @@ void syscall()
 	    break;
 	case SYS_munmap:
 	    ret = sys_munmap(args[0], args[1]);
+		break;
+    case SYS_setpriority:
+	    ret = sys_set_priority(args[0]);
 		break;
 	default:
 		ret = -1;
